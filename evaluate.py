@@ -1,5 +1,6 @@
 from sklearn.metrics import brier_score_loss
 import numpy as np
+from keras import backend as K
 
 
 def calculate_BS(y_target, y_pred, n_class):
@@ -12,3 +13,25 @@ def calculate_BS(y_target, y_pred, n_class):
 
     mean_BS = np.mean(n_BS)
     return {'BS': n_BS, 'mean_BS': mean_BS}
+
+
+
+def f1(y_true, y_pred):    
+    def recall_m(y_true, y_pred):
+        TP = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        Positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+        
+        recall = TP / (Positives+K.epsilon())    
+        return recall 
+    
+    
+    def precision_m(y_true, y_pred):
+        TP = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        Pred_Positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    
+        precision = TP / (Pred_Positives+K.epsilon())
+        return precision 
+    
+    precision, recall = precision_m(y_true, y_pred), recall_m(y_true, y_pred)
+    
+    return 2*((precision*recall)/(precision+recall+K.epsilon()))
