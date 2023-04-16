@@ -35,3 +35,10 @@ def f1(y_true, y_pred):
     precision, recall = precision_m(y_true, y_pred), recall_m(y_true, y_pred)
     
     return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
+def show_eval_result(acc_score, f1_score, auc_score, BS):
+    print('accuracy:    {:.2f}'.format(acc_score))
+    print('f1:          {:.2f}'.format(f1_score))
+    print('auc:         {:.2f}'.format(auc_score))
+    print('BS:          {:.2f}, {:.2f}, {:.2f}'.format(BS['BS'][0], BS['BS'][1], BS['BS'][2]))
+    print('mean of BS:  {:.2f}'.format(BS['mean_BS']))
