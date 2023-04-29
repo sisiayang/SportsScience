@@ -42,3 +42,9 @@ def show_eval_result(acc_score, f1_score, auc_score, BS):
     print('auc:         {:.2f}'.format(auc_score))
     print('BS:          {:.2f}, {:.2f}, {:.2f}'.format(BS['BS'][0], BS['BS'][1], BS['BS'][2]))
     print('mean of BS:  {:.2f}'.format(BS['mean_BS']))
+
+def show_eval_result_2class(acc_score, f1_score, auc_score, BS):
+    print('accuracy:    {:.2f}'.format(acc_score))
+    print('f1:          {:.2f}'.format(f1_score))
+    print('auc:         {:.2f}'.format(auc_score))
+    print('BS:          {:.2f}'.format(BS['BS'][0]))
