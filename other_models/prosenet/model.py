@@ -71,7 +71,7 @@ class ProSeNet(tf.keras.Model):
             activation='softmax',
             use_bias=False,
             kernel_regularizer=regularizers.l1(l=L1),
-            kernel_constraint=lambda w: tf.nn.relu(w),
+            kernel_constraint=lambda w: tf.nn.leaky_relu(w),
             name='classifier'
         )
 

@@ -23,9 +23,9 @@ def encoder(input_shape,
     model = Sequential([InputLayer(input_shape=input_shape)])
 
     for i, layer_units in enumerate(layers):
-        return_seq = False if (i == (num_layers - 1)) else True
+        # return_seq = False if (i == (num_layers - 1)) else True
         # Temporarilty setting it false
-        #return_seq = False
+        return_seq = True
 
         next_layer = layer_fn(layer_units, return_sequences=return_seq, name=layer_type+str(i), **layer_args)
 
