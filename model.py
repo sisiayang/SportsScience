@@ -11,3 +11,9 @@ class CNN_with_mask(layers.Layer):
 
     def compute_mask(self, inputs, mask=None):
         return mask
+    def get_config(self):
+        config = super().get_config().copy()
+        config.update({
+            'con_layer': self.con_layer
+        })
+        return config
