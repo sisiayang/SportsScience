@@ -149,7 +149,7 @@ def prosenet_model(shot_sequence_shape: Tuple[int, int, int],
     masked_sequence = layer_masking(inputs)
     embed_shot = tf.squeeze(embed_shot_layer(masked_sequence), axis=2)
     encode = encoder_layer(embed_shot)
-    # prototype = prototypes_layer(embed_shot)
+    prototype = prototypes_layer(embed_shot)
     gru = gru_layer(encode)
     output = classifier(gru)
 

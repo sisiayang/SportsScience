@@ -3,15 +3,45 @@ import pandas as pd
 import numpy as np
 from keras.preprocessing.sequence import pad_sequences
 from sklearn.utils import shuffle
+import random as rd
+
+def permute_sequence(df):
+    rally_list = []
+    new_df = pd.DataFrame(columns=df.columns)
+    for _, rally in df.groupby(['Game', 'Rally']):
+        curr_team = df.iloc[rally.index[0]]['Team']
+        shuffle_list = []
+        tmp_list = []
+        for _, row in rally.iterrows():
+            if(row['Team'] != curr_team):
+                shuffle_list.append(tmp_list)
+                tmp_list = []
+                curr_team = row['Team']
+            tmp_list.append(row.tolist())
+        shuffle_list.append(tmp_list)
+        ############## shuffle ########################
+        shuffled_list = shuffle(shuffle_list, random_state=3)
+        restore_list = []
+        for i in shuffled_list:
+            restore_list += i
+        shuffled_df = pd.DataFrame(restore_list, columns=df.columns)
+        ############## combine df #####################]
+        rally_list.append(shuffled_df)
+
+    rd.shuffle(rally_list)
+    new_df = pd.DataFrame(columns=df.columns)
+    for rally in rally_list:
+        new_df = pd.concat([new_df, rally])
+    return new_df
 
 def permute_feature(df, feature):
     if(feature == 'Original'):
         return df
+    elif(feature == 'Sequence'):
+        return permute_sequence(df)
     shuffled_feature = shuffle(df[feature], random_state=3)
     shuffled_feature = shuffled_feature.reset_index(drop=True)
-
     df[feature] = shuffled_feature
-
     return df
 
 def get_rally_result(df):
@@ -43,7 +73,7 @@ def get_padding_data(df, ignor):
     space_col = [c for c in df.columns if 'Space' in c]
     action_col = [c for c in df.columns if 'Action' in c]
     result_col = ['Errors', 'Score', 'Nothing']
-    others_col = [c for c in df.columns if c not in space_col and c not in action_col and c not in result_col and c != 'Game' and c != 'Rally']
+    others_col = [c for c in df.columns if c not in space_col and c not in action_col and c not in result_col and c != 'Game' and c != 'Rally' and c != 'Team']
     team_col = [c for c in df.columns if 'Team' in c]
 
     rally_set = []
@@ -63,7 +93,7 @@ def get_padding_data(df, ignor):
 
         curr_team = start_from
         for _, shot in df_rally.iterrows():
-            if(shot[team_col].tolist() != curr_team):
+            if(shot[team_col].tolist() != curr_team or len(atk_sequence) == 3):
                 shot_set.append(atk_sequence)
                 shot_space_set.append(atk_space_sequence)
                 shot_action_set.append(atk_action_sequence)
