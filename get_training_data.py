@@ -123,8 +123,8 @@ def get_padding_data(df, ignor):
         rally_space_set.append(shot_space_set)
         rally_action_set.append(shot_action_set)
 
-    padded_rally_set = pad_sequences(rally_set, dtype=float, padding='post')
-    padded_rally_space_set = pad_sequences(rally_space_set, dtype=float, padding='post')
-    padded_rally_action_set = pad_sequences(rally_action_set, dtype=float, padding='post')
+    padded_rally_set = pad_sequences(rally_set, dtype=float, maxlen=19, padding='post')
+    padded_rally_space_set = pad_sequences(rally_space_set, dtype=float, maxlen=19, padding='post')
+    padded_rally_action_set = pad_sequences(rally_action_set, dtype=float, maxlen=19, padding='post')
     
     return padded_rally_set, padded_rally_space_set, padded_rally_action_set
